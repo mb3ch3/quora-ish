@@ -9,10 +9,11 @@ def home(request):
 
 def userRegistration(request):
     form = UserRegistration()
-    if request.method=='POST':
+    if request.method == 'POST':
         form = UserRegistration(request.POST)
         if form.is_valid():
-            username =  form.cleaned_data.get('username')
+            form.save()
+            username = form.cleaned_data.get('username')
             messages.info(request,username+'your  account is created, login to continue')
             return redirect('userprofiles:login')
 
@@ -26,6 +27,8 @@ def userLogin(request):
         user =authenticate(request, username=username, password=password)
         if user is not None:
             login(request,user)
-            return redirect('userprofiles:home')
+            return redirect('quorra_app:home')
         else:
             messages.info(request,'username or password is incorrect')
+
+    return render(request,'userprofiles/login.html')
